@@ -15,6 +15,11 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuSubContent,
 } from '@/components/ui/dropdown-menu'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
 import { useNavigate } from 'react-router-dom'
 
 interface DropdownOption {
@@ -29,9 +34,10 @@ interface DropdownProps {
   name: React.ReactNode
   options: DropdownOption[]
   onSelect?: (path?: string) => void
+  tooltip?: string
 }
 
-const Dropdown = ({ name, options, onSelect }: DropdownProps) => {
+const Dropdown = ({ name, options, onSelect, tooltip }: DropdownProps) => {
   const navigate = useNavigate()
 
   const handleSelect = (path?: string) => {
@@ -42,16 +48,27 @@ const Dropdown = ({ name, options, onSelect }: DropdownProps) => {
     }
   }
 
+  const trigger = (
+    <DropdownMenuTrigger asChild>
+      <Button
+        className="flex items-center gap-2 px-4 py-2 text-base font-medium text-white bg-[#1074b9] hover:bg-[#0e6aa5] hover:text-white rounded-md transition duration-150"
+        variant="ghost"
+      >
+        {name}
+      </Button>
+    </DropdownMenuTrigger>
+  )
+
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          className="flex items-center gap-2 px-4 py-2 text-base font-medium text-white bg-[#1074b9] hover:bg-[#0e6aa5] hover:text-white rounded-md transition duration-150"
-          variant="ghost"
-        >
-          {name}
-        </Button>
-      </DropdownMenuTrigger>
+      {tooltip ? (
+        <Tooltip>
+          <TooltipTrigger asChild>{trigger}</TooltipTrigger>
+          <TooltipContent>{tooltip}</TooltipContent>
+        </Tooltip>
+      ) : (
+        trigger
+      )}
 
       <DropdownMenuContent
         className="w-44 mt-2 rounded-md border border-gray-200 bg-white"
